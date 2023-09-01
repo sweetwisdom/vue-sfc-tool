@@ -1,10 +1,8 @@
-
-
-
-
 # VueSFC Tool
 
-调用`vue-template-compiler@2.7.14_browser`库VueSFC Tool 可以将.vue文件转换为传统多页面模式，方便在维护老旧项目中快速开发，转换代码。
+> [Preview](https://sweetwisdom.github.io/vue-sfc-tool/)
+
+调用`vue-template-compiler@2.7.14_browser`库 VueSFC Tool 可以将.vue 文件转换为传统多页面模式，方便在维护老旧项目中快速开发，转换代码。
 
 ```js
  ...
@@ -15,8 +13,6 @@ const compiler = VueTemplateCompiler;
  const parsed = compiler.parseComponent(text);
 ...
 ```
-
-
 
 ![image-20230901103137747](.imgs/image-20230901103137747.png)
 
@@ -36,16 +32,16 @@ export default {
     fileInfo: {
       type: Object,
       default: () => {
-        return { name: '湖北', type: 'folder' }
+        return { name: "湖北", type: "folder" };
       },
     },
   },
   data() {
-    return {}
+    return {};
   },
   computed: {
     imgSrc() {
-      return `./img/${this.fileInfo.type}.png`
+      return `./img/${this.fileInfo.type}.png`;
     },
   },
 
@@ -54,7 +50,7 @@ export default {
   created() {},
 
   methods: {},
-}
+};
 </script>
 
 <style scoped>
@@ -67,59 +63,54 @@ export default {
   padding: 8px;
 }
 </style>
-
 ```
 
 ## 输出
 
-```html <script> 
-<script> 
- const MyComponent = 
-{ 
- template: `
+```html <script>
+<script>
+  const MyComponent = {
+    template: `
 <div class="file" @click="$emit('click', fileInfo)">
   <img :src="imgSrc" class="img" alt="" />
   <div class="name">{{ fileInfo.name }}</div>
 </div>
-`, 
- 
-  props: {
-    fileInfo: {
-      type: Object,
-      default: () => {
-        return { name: '湖北', type: 'folder' }
+`,
+
+    props: {
+      fileInfo: {
+        type: Object,
+        default: () => {
+          return { name: "湖北", type: "folder" };
+        },
       },
     },
-  },
-  data() {
-    return {}
-  },
-  computed: {
-    imgSrc() {
-      return `./img/${this.fileInfo.type}.png`
+    data() {
+      return {};
     },
-  },
+    computed: {
+      imgSrc() {
+        return `./img/${this.fileInfo.type}.png`;
+      },
+    },
 
-  watch: {},
-  mounted() {},
-  created() {},
+    watch: {},
+    mounted() {},
+    created() {},
 
-  methods: {},
-}
- 
- </script> 
- <style> 
- 
-.file {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  margin: 6px;
-  padding: 8px;
-}
- 
-</style> 
+    methods: {},
+  };
+</script>
+<style>
+  .file {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 6px;
+    padding: 8px;
+  }
+</style>
 ```
 
 ## 特性
@@ -136,4 +127,4 @@ export default {
 
 ## 部署
 
-使用es6的模块化，不支持文件协议打开，需要使用webserve打开
+使用 es6 的模块化，不支持文件协议打开，需要使用 webserve 打开
