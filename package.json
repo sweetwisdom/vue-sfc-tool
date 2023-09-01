@@ -1,0 +1,16 @@
+{
+  "name": "vue-sfc-tool",
+  "version": "1.0.0",
+  "description": "将.vue文件转换为传统多页面模式，方便在维护老旧项目中快速开发，转换代码",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vue",
+    "vue-sfc",
+    "vue转换工具"
+  ],
+  "author": "Mr.Zhang",
+  "license": "MIT"
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- import CSS -->
+    <title>Vue SFC 转换工具</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./static/css/index.css" />
+    <link rel="stylesheet" href="./static/css/recet.css" />
+    <link rel="stylesheet" href="./static/editor/codemirror.css" />
+    <link rel="stylesheet" href="./static/editor/theme_material-palenight.css" />
+    <link rel="stylesheet" href="./static/css/editor.css" />
+    <script src="static/js/vue.js"></script>
+    <script src="static/js/index.js"></script>
+    <link rel="stylesheet" href="static/css/element-theme-2.7.0.min.css" />
+    <!-- <script src="static/js/tool.js"></script> -->
+    <script src="/static/js/vue-template-compiler@2.7.14_browser.js"></script>
+    <script src="/static/editor/codemirror.min.js"></script>
+    <script src="./static/editor/mode_javascript_javascript.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div>
+        <el-row class="p-4" :gutter="20">
+          <h2 class="page-title">Vue SFC 转换工具 <el-button type="primary" @click="handleFile"> 选择文件 </el-button></h2>
+          <el-col :span="12">
+            <div>
+              <el-alert title="输入区域" type="info" :closable="false"> </el-alert>
+              <input v-show="false" type="file" ref="fileSelect" accept=".vue" @change="handleFileChange" />
+              <div id="inputEditor" spellcheck="false"></div>
+              <!-- <el-input v-model="inputdate" type="textarea" :autosize="{ minRows: 20, maxRows: 20 }" placeholder="请粘贴.vue文件代码到这里"></el-input> -->
+              <div class="my-2 text-right">
+                <el-button type="primary" @click="manualtoDate">转换</el-button>
+              </div>
+            </div>
+          </el-col>
+
+          <el-col :span="12">
+            <div>
+              <el-alert title="结果" type="info" :closable="false"></el-alert>
+              <!-- 代码块 -->
+              <div id="editor" spellcheck="false"></div>
+
+              <!-- <el-input :value="outputdate" type="textarea" :autosize="{ minRows: 20, maxRows: 20 }"></el-input> -->
+              <div class="my-2 text-right">
+                <el-button class="mr-4" type="primary" @click="copyToClipboard">复制</el-button>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+    <!-- Code injected by live-server -->
+  </body>
+
+  <script type="module">
+    new Vue({
+      el: "#app",
+      data: function () {
+        return {
+          inputdate: "",
+          outputdate: "",
+          cssEditor: null,
+          codeEditor: null,
+          inputEditor: null,
+        };
+      },
+      created() {},
+      mounted() {
+        this.codeEditor = CodeMirror(editor, {
+          mode: {
+            name: "javascript",
+            json: true,
+          },
+          //   高度
+          height: "auto",
+          lineNumbers: true,
+          theme: "material-palenight",
+          //   自动换行
+          lineWrapping: true,
+        });
+        this.inputEditor = CodeMirror(inputEditor, {
+          mode: {
+            name: "javascript",
+            json: true,
+          },
+          //   高度
+          height: "auto",
+          lineNumbers: true,
+          lineWrapping: true,
+          theme: "material-palenight",
+        });
+      },
+
+      methods: {
+        // 选择文件
+        handleFile() {
+          this.$refs.fileSelect.click();
+        },
+        handleFileChange(e) {
+          let file = e.target.files[0];
+          let reader = new FileReader();
+          reader.readAsText(file);
+          reader.onload = (e) => {
+            console.log(e.target.result);
+            this.inputdate = e.target.result;
+            this.inputEditor.setValue(this.inputdate);
+            this.toDate();
+            this.copyToClipboard();
+          };
+        },
+        toDate() {
+          // 分割换行 转换数组
+          const { component, style } = convertVueSFC(this.inputdate);
+          this.outputdate = ` ${component}\n <style> \n ${style} \n</style> `;
+
+          this.codeEditor.setValue(this.outputdate);
+        },
+        manualtoDate() {
+          this.outputdate = "";
+          this.inputdate = this.inputEditor.getValue();
+          this.toDate;
+        },
+
+        copyToClipboard(text = this.outputdate) {
+          var textArea = document.createElement("textarea");
+          textArea.value = text;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand("copy");
+          textArea.remove();
+          this.$message.success("复制成功!");
+        },
+      },
+    });
+  </script>
+</html>
+
+<style>
+  #app,
+  body {
+    background-color: #252f69;
+    color: #fff;
+  }
+  .page-title {
+    font-size: 22px;
+    height: 40px;
+    line-height: 40px;
+    padding: 15px 20px;
+  }
+  .top {
+    display: flex;
+    padding: 20px 10vw;
+
+    /* text-align: center; */
+    align-items: center;
+    justify-content: center;
+  }
+  .title {
+    text-align: center;
+    margin: 10px 0;
+  }
+  #inputEditor,
+  #editor {
+    height: calc(100vh - 220px);
+  }
+</style>
